@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Detail - {{ book.title }}
+{% endblock title %}
+
+{% block content %}
+    <a href="{% url 'book_delete' book.id %}">Delete Book</a>
+    <a href="{% url 'book_copy_create' book.id %}">Create Copy</a>
+    <h2>Copies of {{ book.title }}</h2>
+    <ul>
+        {% for copy in book.copies.all %}
+        <li>{{ copy.form }} on {{ copy.platform }}</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

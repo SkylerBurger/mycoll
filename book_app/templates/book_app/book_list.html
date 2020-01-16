@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}List - Books{% endblock title %}
+
+{% block content %}
+    <a href="{% url 'book_create' %}">Create Book</a>
+    <h2>Your Book Collection:</h2>
+    <ul>
+        {% for book in book_list %}
+            {% if book.owner == user %}
+                <li>
+                    <h2><a href="{% url 'book_detail' book.id %} ">{{ book.title }} by {{ book.author }}</a></h2>
+                    <p>Published in {{ book.published }}</p>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock content %}
