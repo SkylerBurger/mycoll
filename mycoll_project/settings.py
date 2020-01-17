@@ -37,8 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 3rd-Party Apps
+    'rest_framework',
     # Local Apps
     'accounts.apps.AccountsConfig',
+    'api.apps.ApiConfig',
     'movie_app.apps.MovieAppConfig',
 ]
 
@@ -104,6 +107,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Django REST Framework Global Settings
+REST_Framework = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ]
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
