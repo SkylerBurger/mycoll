@@ -2,8 +2,14 @@
 Media Database in Django
 
 ## TODO:
-- [X] Simple Home Page
-- [X] User Auth
-  - [X] Login
-  - [X] Signup
-  - [X] Logout
+- [ ] Create Movie App
+  - [ ] Create Movie Model
+    - [ ] ListView view & template
+    - [ ] DetailView view & template
+    - [ ] UpdateView view & template
+    - [ ] DeleteView view & template
+  - [ ] Create MovieCopy Mode
+    - [ ] ListView view & template
+    - [ ] DetailView view & template
+    - [ ] UpdateView view & template
+    - [ ] DeleteView view & template

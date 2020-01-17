@@ -8,4 +8,5 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('accounts.urls')),
     path('', HomePageView.as_view(), name='home'),
+    path('movies/', include('movie_app.urls')),
 ]
