@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Django REST Framework Global Settings
 REST_Framework = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }
 

@@ -7,13 +7,12 @@ from django.views.generic import (
     DeleteView,
 )
 
-from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework import permissions
 
 from .models import Movie
 from .serializers import MovieSerializer
-from.permissions import IsOwnerOrReadOnly
+from .permissions import IsOwner
 
 
 class MovieDetailView(DetailView):
@@ -48,18 +47,14 @@ class MovieDeleteView(DeleteView):
     model = Movie
     template_name = 'movie_app/movie_delete.html'
     success_url = reverse_lazy('home')
-
-
-
-# class MovieViewSet(viewsets.ModelViewSet):
-#     queryset = Movie.objects.all()
-#     serializer_class = MovieSerializer 
-
-
-class MovieViewSet(viewsets.ModelViewSet):
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly,
-    ]
-    queryset = Movie.objects.all()
     serializer_class = MovieSerializer 
+
+
+class MovieListAPIView(generics.ListAPIView):
+    Model = Movie
+    permission_classes = [IsOwner,]
+    serializer_class = MovieSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Movie.objects.all().filter(owner=user) 
