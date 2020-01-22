@@ -10,8 +10,8 @@ from django.views.generic import (
 from rest_framework import generics
 from rest_framework import permissions
 
-from .models import Movie
-from .serializers import MovieSerializer
+from .models import Movie, MovieCopy
+from .serializers import MovieSerializer, MovieCopySerializer
 from .permissions import IsOwner
 
 
@@ -52,9 +52,29 @@ class MovieDeleteView(DeleteView):
 
 class MovieListAPIView(generics.ListAPIView):
     Model = Movie
-    permission_classes = [IsOwner,]
+    permission_classes = [
+        IsOwner,
+    ]
     serializer_class = MovieSerializer
+    queryset = Movie.objects.all()
 
-    def get_queryset(self):
-        user = self.request.user
-        return Movie.objects.all().filter(owner=user) 
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     return Movie.objects.all().filter(owner=user)
+
+
+class MovieCopyListAPIView(generics.ListAPIView):
+    model = MovieCopy
+    permission_classes = [
+        IsOwner,
+    ]
+    serializer_class = MovieCopySerializer
+    queryset = MovieCopy.objects.all()
+
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     return MovieCopy.objects.all().filter(owner=user)
+
+
+# Next Step:
+# - package my custom get_queryset into an OPP mixin class
