@@ -10,6 +10,7 @@ django = "*"
 whitenoise = "*"
 gunicorn = "*"
 djangorestframework = "*"
+djangorestframework-simplejwt = "*"
 
 [requires]
 python_version = "3.7"
