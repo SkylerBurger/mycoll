@@ -11,6 +11,7 @@ class MovieSerializer(serializers.ModelSerializer):
             'title',
             'release_year',
             'mpaa_rating',
+<<<<<<< HEAD
             'runtime_minutes',
         ]
     
@@ -21,17 +22,26 @@ class MovieSerializer(serializers.ModelSerializer):
         """
         validated_data['owner'] = self.context['request'].user
         return super().create(validated_data)
+=======
+            'run_time_minutes',
+        ]
+>>>>>>> 0db35debfafee401ea853d4502b68880cd83582b
 
 
 class MovieCopySerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieCopy
         fields = [
+<<<<<<< HEAD
             'id',
+=======
+            'owner',
+>>>>>>> 0db35debfafee401ea853d4502b68880cd83582b
             'movie',
             'platform',
             'form',
         ]
+<<<<<<< HEAD
 
     def create(self, validated_data):
         """
@@ -50,3 +60,5 @@ I tried to further alter the default methods of the generic views
 and realized they were using the serializers to create new instances.
 CDRF.co site helped me understand structure of the default create() method.
 """
+=======
+>>>>>>> 0db35debfafee401ea853d4502b68880cd83582b
