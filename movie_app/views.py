@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django.contrib.auth.models import AnonymousUser
 from django.views.generic import (
     ListView, 
     DetailView,
@@ -59,21 +60,34 @@ class MovieListAPIView(generics.ListAPIView):
     queryset = Movie.objects.all()
 
     # def get_queryset(self):
-    #     user = self.request.user
-    #     return Movie.objects.all().filter(owner=user)
+    #     if not isinstance(self.request.user, AnonymousUser):
+    #         user = self.request.user
+    #         print(user)
+    #         return Movie.objects.all().filter(owner=user)
+    #     else:
+    #         return None
 
 
 class MovieCopyListAPIView(generics.ListAPIView):
     model = MovieCopy
     permission_classes = [
         IsOwner,
-    ]
+    ]  
     serializer_class = MovieCopySerializer
     queryset = MovieCopy.objects.all()
 
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     return MovieCopy.objects.all().filter(owner=user)
+    def get_queryset(self):
+        user = self.request.user
+        return MovieCopy.objects.all().filter(owner=user)
+
+
+class MovieCopyRUDView(generics.RetrieveUpdateDestroyAPIView):
+    model = MovieCopy
+    permission_classes = [
+        IsOwner,
+    ]
+    serializer_class = MovieCopySerializer
+    queryset = MovieCopy.objects.all()
 
 
 # Next Step:
