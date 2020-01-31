@@ -1,15 +1,17 @@
 # MyColl
-Media Database in Django
+A back-end API written in Django for a media collection application.
 
-## TODO:
-- [ ] Create Movie App
-  - [X] Create Movie Model
-    - [X] ListView view & template
-    - [X] DetailView view & template
-    - [X] UpdateView view & template
-    - [X] DeleteView view & template
-  - [ ] Create MovieCopy Mode
-    - [ ] ListView view & template
-    - [ ] DetailView view & template
-    - [ ] UpdateView view & template
-    - [ ] DeleteView view & template
+## Architecture:
+- [**Django**](https://www.djangoproject.com/)
+- [**Django REST Framework**](https://www.django-rest-framework.org/)
+- [**Django REST Framework SimpleJWT**](https://github.com/davesque/django-rest-framework-simplejwt)
+- [**Gunicorn**](https://gunicorn.org/)
+
+## Models
+- **Movie**: Models a unique film in your collection.
+- **MovieCopy**: Models a specific copy of a film in your collection whether video-on-demand (VOD) or DVD.
+
+## API
+- **api/v1/**
+  - **movies/**: A list view of all of the movies in your collection
+  - **movies/copies/**: A list view of all of the movie copies in your collection
