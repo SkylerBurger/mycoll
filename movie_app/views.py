@@ -9,7 +9,6 @@ from .models import (
     Movie, 
     MovieCopy,
 )
-from .permissions import IsOwner
 from .serializers import (
     MovieSerializer,
     MovieCopySerializer,
@@ -44,7 +43,11 @@ class MovieListView(MyMovieMixin, ListCreateAPIView):
     serializer_class = MovieSerializer
 
 
-class MovieCopyListView(MyMovieCopyMixin, ListCreateAPIView):
+class MovieCopyDetailView(MyMovieCopyMixin, RetrieveUpdateDestroyAPIView):
     model = MovieCopy
     serializer_class = MovieCopySerializer
 
+
+class MovieCopyListView(MyMovieCopyMixin, ListCreateAPIView):
+    model = MovieCopy
+    serializer_class = MovieCopySerializer
