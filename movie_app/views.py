@@ -15,7 +15,7 @@ from .serializers import (
 )
 
 
-class MyMovieMixin:
+class MyMoviesMixin:
     def get_queryset(self):
         if not isinstance(self.request.user, AnonymousUser):
             user = self.request.user
@@ -24,7 +24,7 @@ class MyMovieMixin:
             return None
 
 
-class MyMovieCopyMixin:
+class MyMovieCopiesMixin:
     def get_queryset(self):
         if not isinstance(self.request.user, AnonymousUser):
             user = self.request.user
@@ -33,21 +33,21 @@ class MyMovieCopyMixin:
             return None
 
 
-class MovieDetailView(MyMovieMixin, RetrieveUpdateDestroyAPIView):
+class MovieDetailView(MyMoviesMixin, RetrieveUpdateDestroyAPIView):
     model = Movie
     serializer_class = MovieSerializer
 
 
-class MovieListView(MyMovieMixin, ListCreateAPIView):
+class MovieListView(MyMoviesMixin, ListCreateAPIView):
     model = Movie
     serializer_class = MovieSerializer
 
 
-class MovieCopyDetailView(MyMovieCopyMixin, RetrieveUpdateDestroyAPIView):
+class MovieCopyDetailView(MyMovieCopiesMixin, RetrieveUpdateDestroyAPIView):
     model = MovieCopy
     serializer_class = MovieCopySerializer
 
 
-class MovieCopyListView(MyMovieCopyMixin, ListCreateAPIView):
+class MovieCopyListView(MyMovieCopiesMixin, ListCreateAPIView):
     model = MovieCopy
     serializer_class = MovieCopySerializer
