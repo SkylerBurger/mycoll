@@ -1,6 +1,7 @@
+from django.contrib.auth.models import User
+
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from django.contrib.auth.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -26,6 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
             validated_data['email'],
             validated_data['password'],
         )
+        
         return user
 
     class Meta:

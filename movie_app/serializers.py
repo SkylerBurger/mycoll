@@ -20,6 +20,7 @@ class MovieSerializer(serializers.ModelSerializer):
         to add user utilizing JWT
         """
         validated_data['owner'] = self.context['request'].user
+        
         return super().create(validated_data)
 
 
@@ -37,16 +38,9 @@ class MovieCopySerializer(serializers.ModelSerializer):
         """
         Overrides default create() method
         to add user utilizing JWT
+        Credit to:
+        https://stackoverflow.com/questions/57827478/how-to-assign-a-logged-in-user-automatically-to-a-post-in-django-rest-framework
         """
         validated_data['owner'] = self.context['request'].user
-        return super().create(validated_data)
 
-"""
-Create to this StackOverflow page for the create() method:
-https://stackoverflow.com/questions/57827478/how-to-assign-a-logged-in-user-automatically-to-a-post-in-django-rest-framework
-Discussion at bottom of the page helped me realize 
-where I needed to insert the current user before creating an instance of a model.
-I tried to further alter the default methods of the generic views 
-and realized they were using the serializers to create new instances.
-CDRF.co site helped me understand structure of the default create() method.
-"""
+        return super().create(validated_data)

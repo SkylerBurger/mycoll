@@ -20,7 +20,6 @@ class MovieListView(ListCreateAPIView):
     serializer_class = MovieSerializer
 
     def get_queryset(self):
-        print('*** DEF GET_QUERYSET USER:',self.request.user)
         if not isinstance(self.request.user, AnonymousUser):
             user = self.request.user
             return Movie.objects.all().filter(owner=user)
@@ -38,4 +37,3 @@ class MovieCopyListView(ListCreateAPIView):
             return MovieCopy.objects.all().filter(owner=user)
         else:
             return None
-    
