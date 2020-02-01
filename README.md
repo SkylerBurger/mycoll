@@ -5,7 +5,6 @@ A back-end API written in Django for a media collection application.
 - [**Django**](https://www.djangoproject.com/)
 - [**Django REST Framework**](https://www.django-rest-framework.org/)
 - [**Django REST Framework SimpleJWT**](https://github.com/davesque/django-rest-framework-simplejwt)
-- [**Gunicorn**](https://gunicorn.org/)
 
 ## Models
 - **Movie**: Models a unique film in your collection.
