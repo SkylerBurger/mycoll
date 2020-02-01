@@ -33,3 +33,6 @@ A back-end API written in Django for a media collection application.
     - **GET**: A detail view of a specific copy of a movie in your collection
     - **PUT**: Update the details of a specific copy of a movie in your collection
     - **DELETE**: Delete a specific copy of a movie from your collection
+    
+## Roadmap
+Please refer to my Trello board for updates: [MyColl Trello Board](https://trello.com/b/z3woB4Z3/mycoll)
