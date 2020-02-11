@@ -14,7 +14,7 @@ SECRET_KEY = 'odj50ku#0=b74t#^utqw!u!x0ob!*^)73kypt=%^5i7vi+*516'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,11 +25,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 3rd Party Apps
     'rest_framework',
+    'corsheaders',
     # Local Apps
     'movie_app.apps.MovieAppConfig',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,6 +50,12 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
 }
+
+# CORS_ORIGIN_WHITELIST = [
+#     'http://localhost:3000',
+# ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'mycoll_project.urls'
 
