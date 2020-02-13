@@ -1,4 +1,7 @@
-from rest_framework import serializers
+from rest_framework.serializers import (
+    ModelSerializer,
+    PrimaryKeyRelatedField,
+)
 
 from .models import Movie, MovieCopy
 
@@ -18,19 +21,26 @@ class AttributeOwnerMixin:
         return super().create(validated_data)
 
 
-class MovieSerializer(AttributeOwnerMixin, serializers.ModelSerializer):
+class MovieSerializer(AttributeOwnerMixin, ModelSerializer):
     class Meta:
         model = Movie
+        # 'depth' sets the level of detail the serializer will show
+        # before flattening the representation to an ID
+        # 'depth = 1' will expand the detail of the related copies
+        depth = 1
         fields = [
             'id',
             'title',
             'release_year',
             'mpaa_rating',
             'runtime_minutes',
+            'image_link',
+            # 'copies' is the related model
+            'copies',
         ]
 
 
-class MovieCopySerializer(AttributeOwnerMixin, serializers.ModelSerializer):
+class MovieCopySerializer(AttributeOwnerMixin, ModelSerializer):
     class Meta:
         model = MovieCopy
         fields = [
