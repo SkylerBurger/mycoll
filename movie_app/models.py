@@ -18,6 +18,9 @@ class MovieCopy(models.Model):
     owner = models.ForeignKey('auth.user', related_name='all_copies', on_delete=models.CASCADE)
     platform = models.CharField('Platform', max_length=200)
     form = models.CharField('Format', max_length=200)
+    # blank=True allows a form to make a field not required
+    # null=True will store 'null' in empty fields of the database
+    vod_link = models.CharField('VOD Link', max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f'{self.movie.owner.username}\'s {self.form} of {self.movie.title} on {self.platform}'
