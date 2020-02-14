@@ -48,4 +48,5 @@ class MovieCopySerializer(AttributeOwnerMixin, ModelSerializer):
             'movie',
             'platform',
             'form',
+            'vod_link',
         ]
