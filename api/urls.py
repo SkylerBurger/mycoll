@@ -5,6 +5,8 @@ from movie_app.views import (
     MovieListView,
     MovieCopyDetailView,
     MovieCopyListView,
+    TMDbDetailsView,
+    TMDbSearchView,
 ) 
 
 
@@ -28,5 +30,15 @@ urlpatterns = [
         'v1/movies/copies/<int:pk>', 
         MovieCopyDetailView.as_view(), 
         name = 'movie_copy_detail'
+    ),
+    path(
+        'v1/movies/search',
+        TMDbSearchView,
+        name = 'tmdb_movie_search'
+    ),
+    path(
+        'v1/movies/search/details',
+        TMDbDetailsView,
+        name = 'tmdb_movie_details'
     ),
 ]
