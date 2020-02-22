@@ -35,6 +35,7 @@ class MovieSerializer(AttributeOwnerMixin, ModelSerializer):
             'mpaa_rating',
             'runtime_minutes',
             'image_link',
+            'tmdb_page_link',
             # 'copies' is the related model
             'copies',
         ]
