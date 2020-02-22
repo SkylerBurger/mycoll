@@ -86,6 +86,12 @@ def generate_tmdb_poster_path(path):
     return poster_path_url
 
 
+def generate_tmdb_page_link(movie_id):
+    """Generates URL to TMDb page for a specific movie."""
+    base_url = 'https://www.themoviedb.org/movie/'
+    return base_url + movie_id
+
+
 def truncate_tmdb_release_date(release_date):
     """Extracts year from release date provided by TMDb."""
     year = ''
@@ -127,7 +133,8 @@ def TMDbSearchView(request):
 
 def TMDbDetailsView(request):
     """Returns JSON object with details of a specific movie from TMDb."""
-    details_url = generate_tmdb_details_url(request.GET['query'])
+    movie_id = request.GET['query']
+    details_url = generate_tmdb_details_url(movie_id)
     response = requests.get(details_url).json()
     movie_details = {
         'title': response.get('original_title'),
@@ -135,6 +142,7 @@ def TMDbDetailsView(request):
         'mpaa_rating': get_tmdb_mpaa_rating(response),
         'runtime_minutes': response.get('runtime'),
         'image_link': generate_tmdb_poster_path(response.get('poster_path')),
+        'tmdb_page_link': generate_tmdb_page_link(movie_id),
     }
 
     return JsonResponse(movie_details)
