@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse, JsonResponse
 
@@ -74,20 +76,26 @@ def generate_tmdb_poster_path(path):
     return poster_path_url
 
 
+def truncate_tmdb_release_date(release_date):
+    """Extracts year from release date provided by TMDb"""
+    year = ''
+    if release_date != None:
+        year = release_date[:4]
+    return year
+
+
 def TMDbSearchView(request):
     search_url = generate_tmdb_search_url(request.GET['query'])
     response = requests.get(search_url).json();
 
     results = []
     for movie in response.get('results'):
-        print("MOVIE", movie)
         movie_data = {}
-        movie_data['title'] = movie['original_title']
+        movie_data['id'] = movie.get('id')
+        movie_data['title'] = movie.get('original_title')
+        movie_data['overview'] = movie.get('overview', '')
+        movie_data['release_year'] = truncate_tmdb_release_date(movie.get('release_date'))
         movie_data['poster_path'] = generate_tmdb_poster_path(movie.get('poster_path'))
-        # movie_data.overview = movie.overview
-        # movie_data.id = movie.id
         results.append(movie_data)
 
-    print(results)
-
-    return JsonResponse(response)
+    return JsonResponse(results, safe=False)
