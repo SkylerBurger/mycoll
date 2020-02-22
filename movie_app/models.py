@@ -7,7 +7,7 @@ class Movie(models.Model):
     release_year = models.IntegerField('Release Year')
     mpaa_rating = models.CharField('MPAA Rating', max_length=5)
     runtime_minutes = models.IntegerField('Runtime (mins)')
-    image_link = models.CharField('Image Link', max_length=200)
+    image_link = models.CharField('Image Link', max_length=200, blank=True, null=True)
     tmdb_page_link = models.CharField('TMDB Page Link', max_length=200, blank=True, null=True)
 
     def __str__(self):
