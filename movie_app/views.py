@@ -58,8 +58,8 @@ class MovieCopyListView(MyMovieCopiesMixin, ListCreateAPIView):
 
 
 def generate_tmdb_search_url(query):
+    """Generates the URL needed to request movie search results from TMDb."""
     base_url = 'https://api.themoviedb.org/3/search/movie'
-    # TODO: Remove the api key from this file and place into a .env file
     api_key = '?api_key=' + '067c757c5122bd33acc966e32828544c'
     query_param = '&query=' + query
 
@@ -67,9 +67,8 @@ def generate_tmdb_search_url(query):
 
 
 def generate_tmdb_details_url(movie_id):
-    # https://api.themoviedb.org/3/movie/157336?api_key={api_key}&append_to_response=video
+    """Generates the URL needed to request movie details from TMDb."""
     base_url = 'https://api.themoviedb.org/3/movie/'
-    # TODO: Remove the api key from this file and place into a .env file
     api_key = '?api_key=' + '067c757c5122bd33acc966e32828544c'
     append_release_dates = '&append_to_response=release_dates'
 
@@ -77,6 +76,7 @@ def generate_tmdb_details_url(movie_id):
 
 
 def generate_tmdb_poster_path(path):
+    """Generates URL for movie poster image with results from TMDb."""
     poster_path_url = ''
     base_url = 'https://image.tmdb.org/t/p/w500'
     
@@ -87,7 +87,7 @@ def generate_tmdb_poster_path(path):
 
 
 def truncate_tmdb_release_date(release_date):
-    """Extracts year from release date provided by TMDb"""
+    """Extracts year from release date provided by TMDb."""
     year = ''
     if release_date != None:
         year = release_date[:4]
@@ -95,6 +95,7 @@ def truncate_tmdb_release_date(release_date):
 
 
 def get_tmdb_mpaa_rating(response):
+    """Extracts MPAA rating from response provided by TMDb."""
     results = response['release_dates']['results']
     rating = ''
 
@@ -106,23 +107,26 @@ def get_tmdb_mpaa_rating(response):
 
 
 def TMDbSearchView(request):
+    """Returns list of JSON search results from TMDb."""
     search_url = generate_tmdb_search_url(request.GET['query'])
     response = requests.get(search_url).json();
 
     results = []
     for movie in response.get('results'):
-        movie_data = {}
-        movie_data['id'] = movie.get('id')
-        movie_data['title'] = movie.get('original_title')
-        movie_data['overview'] = movie.get('overview', '')
-        movie_data['release_year'] = truncate_tmdb_release_date(movie.get('release_date'))
-        movie_data['poster_path'] = generate_tmdb_poster_path(movie.get('poster_path'))
+        movie_data = {
+            'id': movie.get('id'),
+            'title': movie.get('original_title'),
+            'overview': movie.get('overview', ''),
+            'release_year': truncate_tmdb_release_date(movie.get('release_date')),
+            'poster_path': generate_tmdb_poster_path(movie.get('poster_path')),
+        }
         results.append(movie_data)
 
     return JsonResponse(results, safe=False)
 
 
 def TMDbDetailsView(request):
+    """Returns JSON object with details of a specific movie from TMDb."""
     details_url = generate_tmdb_details_url(request.GET['query'])
     response = requests.get(details_url).json()
     movie_details = {
