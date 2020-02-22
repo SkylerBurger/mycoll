@@ -5,6 +5,7 @@ A back-end API written in Django for a media collection application.
 - [**Django**](https://www.djangoproject.com/)
 - [**Django REST Framework**](https://www.django-rest-framework.org/)
 - [**Django REST Framework SimpleJWT**](https://github.com/davesque/django-rest-framework-simplejwt)
+- [**Requests**](https://2.python-requests.org/en/master/)
 
 ## Models
 - **Movie**: Models a unique film in your collection.
@@ -33,6 +34,10 @@ A back-end API written in Django for a media collection application.
     - **GET**: A detail view of a specific copy of a movie in your collection
     - **PUT**: Update the details of a specific copy of a movie in your collection
     - **DELETE**: Delete a specific copy of a movie from your collection
+  - **movies/search**
+    - **GET**: A list of search results from The Movie Database. Requires a single 'query' param that is the title of the requested movie
+  - **movies/search/details**
+    - **GET**: A set of details regarding a specific movie from The Movie Database (TMDb). Requires a single 'query' param that is the requested movie's ID on TMDb
     
 ## Roadmap
 Please refer to my Trello board for updates: [MyColl Trello Board](https://trello.com/b/z3woB4Z3/mycoll)
