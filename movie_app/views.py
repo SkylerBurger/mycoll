@@ -66,6 +66,16 @@ def generate_tmdb_search_url(query):
     return base_url + api_key + query_param
 
 
+def generate_tmdb_details_url(movie_id):
+    # https://api.themoviedb.org/3/movie/157336?api_key={api_key}&append_to_response=video
+    base_url = 'https://api.themoviedb.org/3/movie/'
+    # TODO: Remove the api key from this file and place into a .env file
+    api_key = '?api_key=' + '067c757c5122bd33acc966e32828544c'
+    append_release_dates = '&append_to_response=release_dates'
+
+    return base_url + movie_id + api_key + append_release_dates
+
+
 def generate_tmdb_poster_path(path):
     poster_path_url = ''
     base_url = 'https://image.tmdb.org/t/p/w500'
@@ -84,6 +94,17 @@ def truncate_tmdb_release_date(release_date):
     return year
 
 
+def get_tmdb_mpaa_rating(response):
+    results = response['release_dates']['results']
+    rating = ''
+
+    for result in results:
+        if result['iso_3166_1'] == "US":
+            rating = result['release_dates'][0]['certification']
+
+    return rating
+
+
 def TMDbSearchView(request):
     search_url = generate_tmdb_search_url(request.GET['query'])
     response = requests.get(search_url).json();
@@ -99,3 +120,17 @@ def TMDbSearchView(request):
         results.append(movie_data)
 
     return JsonResponse(results, safe=False)
+
+
+def TMDbDetailsView(request):
+    details_url = generate_tmdb_details_url(request.GET['query'])
+    response = requests.get(details_url).json()
+    movie_details = {
+        'title': response.get('original_title'),
+        'release_year': truncate_tmdb_release_date(response.get('release_date')),
+        'mpaa_rating': get_tmdb_mpaa_rating(response),
+        'runtime_minutes': response.get('runtime'),
+        'image_link': generate_tmdb_poster_path(response.get('poster_path')),
+    }
+
+    return JsonResponse(movie_details)
