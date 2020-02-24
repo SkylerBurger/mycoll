@@ -94,7 +94,7 @@ def TMDbDetailsView(request):
     """Returns JSON object with details of a specific movie from TMDb."""
     if not verify_token(request):
         return HttpResponseForbidden('Token invalid or expired.')
-        
+
     movie_id = request.GET['query']
     details_url = generate_tmdb_details_url(movie_id)
     response = requests.get(details_url).json()
@@ -173,7 +173,7 @@ def verify_token(request):
     """Verifies that a JWT used in a request is valid."""
     verified = True
     try:
-        user, token = JWTAuthentication().authenticate(request)
+        JWTAuthentication().authenticate(request)
     except InvalidToken:
         verified = False
     return verified 
