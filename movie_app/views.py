@@ -1,13 +1,16 @@
 import json
+from time import time
 
 from django.contrib.auth.models import AnonymousUser
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 
 import requests
 from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
 )
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.exceptions import InvalidToken
 
 from .models import (
     Movie, 
@@ -18,6 +21,10 @@ from .serializers import (
     MovieCopySerializer,
 )
 
+
+# ============
+# CLASS MIXINS
+# ============
 
 class MyMoviesMixin:
     def get_queryset(self):
@@ -36,6 +43,10 @@ class MyMovieCopiesMixin:
         else:
             return None
 
+
+# =====
+# VIEWS
+# =====
 
 class MovieDetailView(MyMoviesMixin, RetrieveUpdateDestroyAPIView):
     model = Movie
@@ -56,6 +67,52 @@ class MovieCopyListView(MyMovieCopiesMixin, ListCreateAPIView):
     model = MovieCopy
     serializer_class = MovieCopySerializer
 
+
+def TMDbSearchView(request):
+    """Returns list of JSON search results from TMDb."""
+    if not verify_token(request):
+        return HttpResponseForbidden('Token invalid or expired.')
+
+    search_url = generate_tmdb_search_url(request.GET['query'])
+    response = requests.get(search_url).json();
+
+    results = []
+    for movie in response.get('results'):
+        movie_data = {
+            'id': movie.get('id'),
+            'title': movie.get('original_title'),
+            'overview': movie.get('overview', ''),
+            'release_year': truncate_tmdb_release_date(movie.get('release_date')),
+            'poster_path': generate_tmdb_poster_path(movie.get('poster_path')),
+        }
+        results.append(movie_data)
+
+    return JsonResponse(results, safe=False)
+
+
+def TMDbDetailsView(request):
+    """Returns JSON object with details of a specific movie from TMDb."""
+    if not verify_token(request):
+        return HttpResponseForbidden('Token invalid or expired.')
+        
+    movie_id = request.GET['query']
+    details_url = generate_tmdb_details_url(movie_id)
+    response = requests.get(details_url).json()
+    movie_details = {
+        'title': response.get('original_title'),
+        'release_year': truncate_tmdb_release_date(response.get('release_date')),
+        'mpaa_rating': get_tmdb_mpaa_rating(response),
+        'runtime_minutes': response.get('runtime'),
+        'image_link': generate_tmdb_poster_path(response.get('poster_path')),
+        'tmdb_page_link': generate_tmdb_page_link(movie_id),
+    }
+
+    return JsonResponse(movie_details)
+
+
+# ================
+# HELPER FUNCTIONS
+# ================
 
 def generate_tmdb_search_url(query):
     """Generates the URL needed to request movie search results from TMDb."""
@@ -112,37 +169,11 @@ def get_tmdb_mpaa_rating(response):
     return rating
 
 
-def TMDbSearchView(request):
-    """Returns list of JSON search results from TMDb."""
-    search_url = generate_tmdb_search_url(request.GET['query'])
-    response = requests.get(search_url).json();
-
-    results = []
-    for movie in response.get('results'):
-        movie_data = {
-            'id': movie.get('id'),
-            'title': movie.get('original_title'),
-            'overview': movie.get('overview', ''),
-            'release_year': truncate_tmdb_release_date(movie.get('release_date')),
-            'poster_path': generate_tmdb_poster_path(movie.get('poster_path')),
-        }
-        results.append(movie_data)
-
-    return JsonResponse(results, safe=False)
-
-
-def TMDbDetailsView(request):
-    """Returns JSON object with details of a specific movie from TMDb."""
-    movie_id = request.GET['query']
-    details_url = generate_tmdb_details_url(movie_id)
-    response = requests.get(details_url).json()
-    movie_details = {
-        'title': response.get('original_title'),
-        'release_year': truncate_tmdb_release_date(response.get('release_date')),
-        'mpaa_rating': get_tmdb_mpaa_rating(response),
-        'runtime_minutes': response.get('runtime'),
-        'image_link': generate_tmdb_poster_path(response.get('poster_path')),
-        'tmdb_page_link': generate_tmdb_page_link(movie_id),
-    }
-
-    return JsonResponse(movie_details)
+def verify_token(request):
+    """Verifies that a JWT used in a request is valid."""
+    verified = True
+    try:
+        user, token = JWTAuthentication().authenticate(request)
+    except InvalidToken:
+        verified = False
+    return verified 
