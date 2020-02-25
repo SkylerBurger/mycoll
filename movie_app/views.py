@@ -101,6 +101,7 @@ def TMDbDetailsView(request):
     movie_details = {
         'title': response.get('original_title'),
         'release_year': truncate_tmdb_release_date(response.get('release_date')),
+        'overview': response.get('overview', ''),
         'mpaa_rating': get_tmdb_mpaa_rating(response),
         'runtime_minutes': response.get('runtime'),
         'image_link': generate_tmdb_poster_path(response.get('poster_path')),
