@@ -31,6 +31,7 @@ class MovieSerializer(AttributeOwnerMixin, ModelSerializer):
         fields = [
             'id',
             'title',
+            'overview',
             'release_year',
             'mpaa_rating',
             'runtime_minutes',

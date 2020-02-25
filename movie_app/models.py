@@ -5,6 +5,7 @@ class Movie(models.Model):
     owner = models.ForeignKey('auth.user', related_name='movies', on_delete=models.CASCADE)
     title = models.CharField('Title', max_length=200)
     release_year = models.IntegerField('Release Year')
+    overview = models.TextField('Overview', blank=True, null=True)
     mpaa_rating = models.CharField('MPAA Rating', max_length=5)
     runtime_minutes = models.IntegerField('Runtime (mins)')
     image_link = models.CharField('Image Link', max_length=200, blank=True, null=True)
