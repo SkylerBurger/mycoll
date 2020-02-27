@@ -1,4 +1,4 @@
-# MyColl
+# MyColl Back End
 A back-end API written in Django for a media collection application.
 
 ## Architecture:
