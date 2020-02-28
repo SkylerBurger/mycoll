@@ -11,6 +11,9 @@ djangorestframework-simplejwt = "*"
 gunicorn = "*"
 django-cors-headers = "*"
 requests = "*"
+django-environ = "*"
+psycopg2-binary = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.7"
