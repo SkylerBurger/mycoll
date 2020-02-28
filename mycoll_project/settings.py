@@ -1,6 +1,17 @@
 import os
 from datetime import timedelta
 
+# Setting up django-environ for environment variables
+import environ
+
+env = environ.Env(
+    # Set defaults for non-extant variables
+    DEBUG=(bool, False)
+)
+
+# Read in the .env file located in Project directory (default)
+environ.Env.read_env()
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -9,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'odj50ku#0=b74t#^utqw!u!x0ob!*^)73kypt=%^5i7vi+*516'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS'))
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -34,6 +45,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -51,11 +63,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
 }
 
-# CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:3000',
-# ]
-
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = tuple(env.list('CORS_ORIGIN_WHITELIST'))
 
 ROOT_URLCONF = 'mycoll_project.urls'
 
@@ -79,8 +87,12 @@ WSGI_APPLICATION = 'mycoll_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD':  env('DATABASE_PASSWORD'),
+        'HOST':  env('DATABASE_HOST'),
+        'PORT':  env('DATABASE_PORT')
     }
 }
 
@@ -110,3 +122,9 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATIC_FILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
