@@ -5,7 +5,11 @@ A back-end API written in Django for a media collection application.
 - [**Django**](https://www.djangoproject.com/)
 - [**Django REST Framework**](https://www.django-rest-framework.org/)
 - [**Django REST Framework SimpleJWT**](https://github.com/davesque/django-rest-framework-simplejwt)
+- [**Django-Environ**](https://github.com/joke2k/django-environ)
+- [**Docker** & **Docker-Compose**](https://www.docker.com/)
+- [**Psycopg 2**](https://github.com/psycopg/psycopg2)
 - [**Requests**](https://2.python-requests.org/en/master/)
+- [**Whitenoise**](https://github.com/evansd/whitenoise)
 
 ## Models
 - **Movie**: Models a unique film in your collection.
