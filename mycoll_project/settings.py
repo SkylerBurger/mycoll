@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 3rd Party Apps
-    'sslserver',
     'rest_framework',
     'corsheaders',
     # Local Apps
@@ -71,7 +70,6 @@ ROOT_URLCONF = 'mycoll_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'mycoll_front_end'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,12 +126,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_FILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'mycoll_front_end', 'build'),
 ]
-
-# HTTPS-Related
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
-SECURE_SSL_REDIRECT = True

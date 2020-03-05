@@ -1,15 +1,13 @@
-# Docker-Compose version
 version: '3.7'
 
 services:
   web:
     build: .
-    # command: python /code/manage.py runserver 0.0.0.0:8000
-    command: /usr/local/bin/gunicorn mycoll_project.wsgi:application -w 2 -b :443 --certfile=./certs/104.248.238.221/cert.pem  --keyfile=./certs/104.248.238.221/key.pem
+    command: gunicorn mycoll_project.wsgi:application --bind 0.0.0.0:8000 --workers 4
     volumes:
       - .:/code
     ports:
-      - 443
+      - 8000:8000
     depends_on:
     - db
 
