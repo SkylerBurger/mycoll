@@ -1,4 +1,16 @@
 server {
+    listen 80 default_server;
+    server_name 104.248.238.221;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name 104.248.238.221;
+
+    ssl_certificate /etc/nginx/ssl/mycoll.crt;
+    ssl_certificate_key /etc/nginx/ssl/mycoll.key;
+
     location / {
         proxy_pass http://web:8000;
     }
