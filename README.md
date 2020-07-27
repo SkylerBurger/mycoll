@@ -8,7 +8,7 @@
 
 ### API
 
-Check out the docs for the MyColl's back-end API over on Postman!
+Check out the docs for MyColl's back-end API over on Postman!
 
 [**MyColl API Documentation**](https://documenter.getpostman.com/view/6103333/T1Ds8ayi?version=latest)
 
