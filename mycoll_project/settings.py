@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'corsheaders',
     # Local Apps
     'movie_app.apps.MovieAppConfig',
+    'tv_app.apps.TvAppConfig',
 ]
 
 MIDDLEWARE = [
