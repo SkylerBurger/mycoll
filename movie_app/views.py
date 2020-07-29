@@ -1,6 +1,3 @@
-import json
-from time import time
-
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 
