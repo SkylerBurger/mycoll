@@ -13,7 +13,7 @@ class Show(models.Model):
 
 
 class Season(models.Model):
-    show = models.ForeignKey(Show, related_name='season', on_delete=models.CASCADE)
+    show = models.ForeignKey(Show, related_name='seasons', on_delete=models.CASCADE)
     title = models.CharField('Title', max_length=200)
     season_number = models.IntegerField('Season Number')
     episode_count = models.IntegerField('Episode Count')
