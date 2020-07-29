@@ -28,7 +28,7 @@ class AttributeOwnerMixin:
 class ShowSerializer(AttributeOwnerMixin, ModelSerializer):
     class Meta:
         model = Show
-        depth = 2  # Setting depth at 2 should show Seasons and SeasonCopys
+        depth = 1  # Setting depth at 2 should show Seasons and SeasonCopys
         fields = [
             'id',
             'title',
@@ -36,7 +36,7 @@ class ShowSerializer(AttributeOwnerMixin, ModelSerializer):
             'overview',
             'image_link',
             'tmdb_page_link',
-            'season',  # The related model
+            'seasons',  # The related model
         ]
 
 
@@ -54,6 +54,7 @@ class SeasonSerializer(AttributeOwnerMixin, ModelSerializer):
             'overview',
             'image_link',
             'tmdb_page_link',
+            'season_copies',
         ]
 
 
@@ -61,7 +62,7 @@ class SeasonCopySerializer(AttributeOwnerMixin, ModelSerializer):
     class Meat:
         model = SeasonCopy
         fields = [
-            'id'
+            'id',
             'season',
             'platform',
             'form',

@@ -1,7 +1,7 @@
 from django.db import models
 
 class Show(models.Model):
-    owner = models.ForeignKey('auth.user', related_name="shows", on_delete=models.CASCADE)
+    owner = models.ForeignKey('auth.user', related_name='shows', on_delete=models.CASCADE)
     title = models.CharField('Title', max_length=200)
     year_first_aired = models.IntegerField('First Aired')
     overview = models.TextField('Overview', blank=True, null=True)
@@ -13,6 +13,7 @@ class Show(models.Model):
 
 
 class Season(models.Model):
+    owner = models.ForeignKey('auth.user', related_name='all_seasons', on_delete=models.CASCADE)
     show = models.ForeignKey(Show, related_name='seasons', on_delete=models.CASCADE)
     title = models.CharField('Title', max_length=200)
     season_number = models.IntegerField('Season Number')
@@ -27,11 +28,11 @@ class Season(models.Model):
 
 
 class SeasonCopy(models.Model):
-    season = models.ForeignKey(Season, related_name='copies', on_delete=models.CASCADE)
+    season = models.ForeignKey(Season, related_name='season_copies', on_delete=models.CASCADE)
     platform = models.CharField('Platform', max_length=200)
     form = models.CharField('Format', max_length=200)
     vod_link = models.CharField('VOD Link', max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.season.show.owner.username}\'s {self.form} of \
+        return f'{self.season.owner.username}\'s {self.form} of \
             {self.season.show.title} season {self.season.season_number} on {self.platform}'

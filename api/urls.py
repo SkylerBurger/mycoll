@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from movie_app.views import (
     MovieDetailView,
@@ -11,34 +11,6 @@ from movie_app.views import (
 
 
 urlpatterns = [
-    path(
-        'v1/movies/', 
-        MovieListView.as_view(), 
-        name = 'movie_list'
-    ),
-    path(
-        'v1/movies/<int:pk>', 
-        MovieDetailView.as_view(), 
-        name = 'movie_detail'
-    ),
-    path(
-        'v1/movies/copies/', 
-        MovieCopyListView.as_view(), 
-        name = 'movie_copy_list'
-    ),
-    path(
-        'v1/movies/copies/<int:pk>', 
-        MovieCopyDetailView.as_view(), 
-        name = 'movie_copy_detail'
-    ),
-    path(
-        'v1/movies/search',
-        TMDbSearchView,
-        name = 'tmdb_movie_search'
-    ),
-    path(
-        'v1/movies/search/details',
-        TMDbDetailsView,
-        name = 'tmdb_movie_details'
-    ),
+    path('v1/movies/', include('movie_app.urls')),
+    path('v1/tv/', include('tv_app.urls')),
 ]
