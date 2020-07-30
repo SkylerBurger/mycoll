@@ -67,7 +67,17 @@ class SeasonDetailView(MySeasonsMixin, RetrieveUpdateDestroyAPIView):
     serializer_class = SeasonSerializer
 
 
+class SeasonListView(MyShowsMixin, ListCreateAPIView):
+    model = Season
+    serializer_class = SeasonSerializer
+
+
 class SeasonCopyDetailView(MySeasonCopiesMixin, RetrieveUpdateDestroyAPIView):
+    model = SeasonCopy
+    serializer_class = SeasonCopySerializer
+
+
+class SeasonCopyListView(MyShowsMixin, ListCreateAPIView):
     model = SeasonCopy
     serializer_class = SeasonCopySerializer
 
