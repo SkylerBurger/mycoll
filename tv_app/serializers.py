@@ -25,6 +25,15 @@ class AttributeOwnerMixin:
         return super().create(validated_data)
 
 
+class AttributeShowMixin:
+    """Takes the show id from the form data and adds it to 'show_id' in validated data."""
+    def create(self, validated_data):
+        show_id = int(self.context['request'].POST['show'][0])
+        validated_data['show_id'] = show_id
+
+        return super().create(validated_data)
+
+
 class ShowSerializer(AttributeOwnerMixin, ModelSerializer):
     class Meta:
         model = Show
@@ -40,7 +49,7 @@ class ShowSerializer(AttributeOwnerMixin, ModelSerializer):
         ]
 
 
-class SeasonSerializer(AttributeOwnerMixin, ModelSerializer):
+class SeasonSerializer(AttributeOwnerMixin, AttributeShowMixin, ModelSerializer):
     class Meta:
         model = Season
         depth = 1
@@ -59,7 +68,7 @@ class SeasonSerializer(AttributeOwnerMixin, ModelSerializer):
 
 
 class SeasonCopySerializer(AttributeOwnerMixin, ModelSerializer):
-    class Meat:
+    class Meta:
         model = SeasonCopy
         fields = [
             'id',
