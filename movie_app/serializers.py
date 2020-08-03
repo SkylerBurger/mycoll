@@ -37,8 +37,7 @@ class MovieSerializer(AttributeOwnerMixin, ModelSerializer):
             'runtime_minutes',
             'image_link',
             'tmdb_page_link',
-            # 'copies' is the related model
-            'copies',
+            'copies',  # Related Model
         ]
 
 

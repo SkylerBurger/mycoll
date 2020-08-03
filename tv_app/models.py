@@ -15,7 +15,7 @@ class Show(models.Model):
 class Season(models.Model):
     owner = models.ForeignKey('auth.user', related_name='all_seasons', on_delete=models.CASCADE)
     show = models.ForeignKey(Show, related_name='seasons', on_delete=models.CASCADE)
-    title = models.CharField('Title', max_length=200)
+    title = models.CharField('Title', max_length=200, blank=True, null=True)
     season_number = models.IntegerField('Season Number')
     episode_count = models.IntegerField('Episode Count')
     year_first_aired = models.IntegerField('First Aired')
@@ -28,6 +28,7 @@ class Season(models.Model):
 
 
 class SeasonCopy(models.Model):
+    owner = models.ForeignKey('auth.user', related_name='all_season_copies', on_delete=models.CASCADE)
     season = models.ForeignKey(Season, related_name='season_copies', on_delete=models.CASCADE)
     platform = models.CharField('Platform', max_length=200)
     form = models.CharField('Format', max_length=200)
