@@ -68,7 +68,7 @@ class SeasonSerializer(AttributeOwnerMixin, AttributeShowMixin, ModelSerializer)
 
 
 class SeasonCopySerializer(AttributeOwnerMixin, ModelSerializer):
-    class Meat:
+    class Meta:
         model = SeasonCopy
         fields = [
             'id',

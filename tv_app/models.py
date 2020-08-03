@@ -28,6 +28,7 @@ class Season(models.Model):
 
 
 class SeasonCopy(models.Model):
+    owner = models.ForeignKey('auth.user', related_name='all_season_copies', on_delete=models.CASCADE)
     season = models.ForeignKey(Season, related_name='season_copies', on_delete=models.CASCADE)
     platform = models.CharField('Platform', max_length=200)
     form = models.CharField('Format', max_length=200)

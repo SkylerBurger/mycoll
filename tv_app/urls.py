@@ -16,5 +16,5 @@ urlpatterns = [
     path('season', SeasonListView.as_view(), name='season_list'),
     path('season/<int:pk>', SeasonDetailView.as_view(), name='season_detail'),
     path('season/copy', SeasonCopyListView.as_view(), name='season_copy_list'),
-    path('season/copy/<int:id>', SeasonCopyDetailView.as_view(), name='season_copy_detail'),
+    path('season/copy/<int:pk>', SeasonCopyDetailView.as_view(), name='season_copy_detail'),
 ]
