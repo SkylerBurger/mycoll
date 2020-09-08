@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Movie(models.Model):
@@ -14,6 +15,9 @@ class Movie(models.Model):
     def __str__(self):
         return f'{self.title} ({self.release_year})'
 
+    @property
+    def _absolute_url(self):
+        return reverse('movie_detail', args=[str(self.id)])
 
 class MovieCopy(models.Model):
     movie = models.ForeignKey(Movie, related_name='copies', on_delete=models.CASCADE)
@@ -24,3 +28,7 @@ class MovieCopy(models.Model):
 
     def __str__(self):
         return f'{self.movie.owner.username}\'s {self.form} of {self.movie.title} on {self.platform}'
+
+    @property
+    def _absolute_url(self):
+        return reverse('movie_detail', args=[str(self.id)])
