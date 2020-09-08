@@ -7,6 +7,7 @@ from .models import (
     MovieCopy,
 )
 
+import json
 
 class MovieAppTests(TestCase):
     def setUp(self):
@@ -54,6 +55,16 @@ class MovieAppTests(TestCase):
 
     def test_movie_absolute_url(self):
         self.assertEqual(self.movie._absolute_url, '/api/v1/movies/1')
+
+    def test_movie_list_view(self):
+        response = self.client.get(reverse('movie_list'))
+        self.assertEqual(response.status_code, 200)
+        # Need to dig deeper into 'response' to find JSON content
+
+    # def test_movie_detail_view(self):
+    #     response = self.client.get('/api/v1/movies/1')
+    #     # Receiving a 404 back for some reason
+    #     self.assertEqual(response.status_code, 200)
 
     # MovieCopy Model Tests
     def test_moviecopy_str(self):
