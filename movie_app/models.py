@@ -31,4 +31,4 @@ class MovieCopy(models.Model):
 
     @property
     def _absolute_url(self):
-        return reverse('movie_detail', args=[str(self.id)])
+        return reverse('movie_copy_detail', args=[str(self.id)])

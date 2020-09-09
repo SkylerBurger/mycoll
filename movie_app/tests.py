@@ -62,12 +62,30 @@ class MovieAppTests(TestCase):
         # Need to dig deeper into 'response' to find JSON content
 
     # def test_movie_detail_view(self):
-    #     response = self.client.get('/api/v1/movies/1')
+    #     url = reverse('movie_detail', args=['1'])
+    #     print(url)
+    #     response = self.client.get(url)
     #     # Receiving a 404 back for some reason
     #     self.assertEqual(response.status_code, 200)
 
     # MovieCopy Model Tests
+    def test_moviecopy_content(self):
+        self.assertEqual(self.movie_copy.owner.username, 'justatest')
+        self.assertEqual(self.movie_copy.movie.title, 'Sphere')
+        self.assertEqual(self.movie_copy.platform, 'Amazon Prime Video')
+        self.assertEqual(self.movie_copy.form, 'VOD')
+        self.assertEqual(self.movie_copy.vod_link, 'amazon.com')
+
     def test_moviecopy_str(self):
         expected = 'justatest\'s VOD of Sphere on Amazon Prime Video'
         actual = str(self.movie_copy)
         self.assertEqual(actual, expected)
+
+    def test_moviecopy_absolute_url(self):
+        # ID is 5 because this is the 6th test function that has run setUp()
+        # Tests seems to be run in alphabetical order by method name
+        self.assertEqual(self.movie_copy._absolute_url, '/api/v1/movies/copies/6')
+
+    def test_moviecopy_list_view(self):
+        response = self.client.get(reverse('movie_copy_list'))
+        self.assertEqual(response.status_code, 200)
