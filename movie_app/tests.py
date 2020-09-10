@@ -9,7 +9,7 @@ from .models import (
 
 import json
 
-class MovieAppTests(TestCase):
+class MovieModelTests(TestCase):
     def setUp(self):
         # Dummy user
         self.user = get_user_model().objects.create_user(
@@ -69,6 +69,41 @@ class MovieAppTests(TestCase):
     #     self.assertEqual(response.status_code, 200)
 
     # MovieCopy Model Tests
+
+
+class MovieCopyModelTests(TestCase):
+    def setUp(self):
+        # Dummy user
+        self.user = get_user_model().objects.create_user(
+            username='justatest',
+            email='test@test.com',
+            password='supersecret',
+        )
+        # Dummy Movie
+        self.movie = Movie.objects.create(
+            owner=self.user,
+            title='Sphere',
+            release_year=1998,
+            overview='Something is at the bottom of the ocean!',
+            mpaa_rating='R',
+            runtime_minutes=120,
+            image_link='www.google.com',
+            tmdb_page_link='www.google.com',
+        )
+        # Dummy MovieCopy
+        self.movie_copy = MovieCopy.objects.create(
+            movie=self.movie,
+            owner=self.user,
+            platform='Amazon Prime Video',
+            form='VOD',
+            vod_link='amazon.com',
+        )
+
+    def test_moviecopy_absolute_url(self):
+        # ID is 5 because this is the 6th test function that has run setUp()
+        # Tests seems to be run in alphabetical order by method name
+        self.assertEqual(self.movie_copy._absolute_url, '/api/v1/movies/copies/6')
+    
     def test_moviecopy_content(self):
         self.assertEqual(self.movie_copy.owner.username, 'justatest')
         self.assertEqual(self.movie_copy.movie.title, 'Sphere')
@@ -76,16 +111,12 @@ class MovieAppTests(TestCase):
         self.assertEqual(self.movie_copy.form, 'VOD')
         self.assertEqual(self.movie_copy.vod_link, 'amazon.com')
 
+    def test_moviecopy_list_view(self):
+        response = self.client.get(reverse('movie_copy_list'))
+        self.assertEqual(response.status_code, 200)
+    
     def test_moviecopy_str(self):
         expected = 'justatest\'s VOD of Sphere on Amazon Prime Video'
         actual = str(self.movie_copy)
         self.assertEqual(actual, expected)
-
-    def test_moviecopy_absolute_url(self):
-        # ID is 5 because this is the 6th test function that has run setUp()
-        # Tests seems to be run in alphabetical order by method name
-        self.assertEqual(self.movie_copy._absolute_url, '/api/v1/movies/copies/6')
-
-    def test_moviecopy_list_view(self):
-        response = self.client.get(reverse('movie_copy_list'))
-        self.assertEqual(response.status_code, 200)
+    
