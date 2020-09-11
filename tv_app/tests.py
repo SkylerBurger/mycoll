@@ -85,17 +85,41 @@ class SeasonModelTests(TestCase):
             season_number=1,
             episode_count=23,
             year_first_aired=1996,
+            title='Season One',
             overview='Things are just getting started!',
             image_link='www.google.com',
             tmdb_page_link='www.tmdb.org',
         )
 
-        return season
+        return season, show, user
 
     def test_season_absolute_url(self):
-        season = self.create_season()
+        season, show, user = self.create_season()
         expected = '/api/v1/tv/season/1'
         actual = season._absolute_url
+        self.assertEqual(actual, expected)
+
+    def test_season_list_view(self):
+        response = self.client.get(reverse('season_list'))
+        self.assertEqual(response.resolver_match.func.__name__, SeasonListView.as_view().__name__)
+        self.assertEqual(response.status_code, 200)
+
+    def test_season_content(self):
+        season, show, user = self.create_season()
+        self.assertEqual(season.owner.username, 'justatest')
+        self.assertEqual(season.show, show)
+        self.assertEqual(season.title, 'Season One')
+        self.assertEqual(season.season_number, 1)
+        self.assertEqual(season.episode_count, 23)
+        self.assertEqual(season.year_first_aired, 1996)
+        self.assertEqual(season.overview, 'Things are just getting started!')
+        self.assertEqual(season.image_link, 'www.google.com')
+        self.assertEqual(season.tmdb_page_link, 'www.tmdb.org')
+
+    def test_season_str(self):
+        season, show, user = self.create_season()
+        expected = 'Sabrina the Teenage Witch - Season 1'
+        actual = str(season)
         self.assertEqual(actual, expected)
 
 
