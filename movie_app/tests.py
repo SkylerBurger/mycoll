@@ -16,16 +16,14 @@ from .views import (
 import json
 
 class MovieModelTests(TestCase):
-    def setUp(self):
-        # Dummy user
-        self.user = get_user_model().objects.create_user(
+    def create_movie(self):
+        user = get_user_model().objects.create_user(
             username='justatest',
             email='test@test.com',
             password='supersecret',
         )
-        # Dummy Movie
-        self.movie = Movie.objects.create(
-            owner=self.user,
+        movie = Movie.objects.create(
+            owner=user,
             title='Sphere',
             release_year=1998,
             overview='Something is at the bottom of the ocean!',
@@ -34,33 +32,31 @@ class MovieModelTests(TestCase):
             image_link='www.google.com',
             tmdb_page_link='www.google.com',
         )
-        # Dummy MovieCopy
-        self.movie_copy = MovieCopy.objects.create(
-            movie=self.movie,
-            owner=self.user,
-            platform='Amazon Prime Video',
-            form='VOD',
-            vod_link='amazon.com',
-        )
 
-    # Movie Model Tests
+        return movie
+
     def test_movie_content(self):
-        self.assertEqual(self.movie.owner.username, 'justatest')
-        self.assertEqual(self.movie.title, 'Sphere')
-        self.assertEqual(self.movie.release_year, 1998)
-        self.assertEqual(self.movie.overview, 'Something is at the bottom of the ocean!')
-        self.assertEqual(self.movie.mpaa_rating, 'R')
-        self.assertEqual(self.movie.runtime_minutes, 120)
-        self.assertEqual(self.movie.image_link, 'www.google.com')
-        self.assertEqual(self.movie.tmdb_page_link, 'www.google.com')
+        movie = self.create_movie()
+        self.assertEqual(movie.owner.username, 'justatest')
+        self.assertEqual(movie.title, 'Sphere')
+        self.assertEqual(movie.release_year, 1998)
+        self.assertEqual(movie.overview, 'Something is at the bottom of the ocean!')
+        self.assertEqual(movie.mpaa_rating, 'R')
+        self.assertEqual(movie.runtime_minutes, 120)
+        self.assertEqual(movie.image_link, 'www.google.com')
+        self.assertEqual(movie.tmdb_page_link, 'www.google.com')
 
     def test_movie_str(self):
+        movie = self.create_movie()
         expected = 'Sphere (1998)'
-        actual = str(self.movie)
+        actual = str(movie)
         self.assertEqual(actual, expected)
 
     def test_movie_absolute_url(self):
-        self.assertURLEqual(self.movie._absolute_url, '/api/v1/movies/5')
+        movie = self.create_movie()
+        expected = f'/api/v1/movies/{movie.id}'
+        actual = movie._absolute_url
+        self.assertURLEqual(actual, expected)
 
     def test_movie_list_view(self):
         response = self.client.get(reverse('movie_list'))
@@ -79,16 +75,14 @@ class MovieModelTests(TestCase):
 
 
 class MovieCopyModelTests(TestCase):
-    def setUp(self):
-        # Dummy user
-        self.user = get_user_model().objects.create_user(
+    def create_movie_copy(self):
+        user = get_user_model().objects.create_user(
             username='justatest',
             email='test@test.com',
             password='supersecret',
         )
-        # Dummy Movie
-        self.movie = Movie.objects.create(
-            owner=self.user,
+        movie = Movie.objects.create(
+            owner=user,
             title='Sphere',
             release_year=1998,
             overview='Something is at the bottom of the ocean!',
@@ -97,26 +91,29 @@ class MovieCopyModelTests(TestCase):
             image_link='www.google.com',
             tmdb_page_link='www.google.com',
         )
-        # Dummy MovieCopy
-        self.movie_copy = MovieCopy.objects.create(
-            movie=self.movie,
-            owner=self.user,
+        movie_copy = MovieCopy.objects.create(
+            movie=movie,
+            owner=user,
             platform='Amazon Prime Video',
             form='VOD',
             vod_link='amazon.com',
         )
 
-    def test_moviecopy_absolute_url(self):
-        # ID is 5 because this is the 6th test function that has run setUp()
-        # Tests seems to be run in alphabetical order by method name
-        self.assertURLEqual(self.movie_copy._absolute_url, '/api/v1/movies/copies/1')
+        return movie_copy
+
+    def test_movie_copy_absolute_url(self):
+        movie_copy = self.create_movie_copy()
+        expected = f'/api/v1/movies/copies/{movie_copy.id}'
+        actual = movie_copy._absolute_url
+        self.assertURLEqual(actual, expected)
 
     def test_moviecopy_content(self):
-        self.assertEqual(self.movie_copy.owner.username, 'justatest')
-        self.assertEqual(self.movie_copy.movie.title, 'Sphere')
-        self.assertEqual(self.movie_copy.platform, 'Amazon Prime Video')
-        self.assertEqual(self.movie_copy.form, 'VOD')
-        self.assertEqual(self.movie_copy.vod_link, 'amazon.com')
+        movie_copy = self.create_movie_copy()
+        self.assertEqual(movie_copy.owner.username, 'justatest')
+        self.assertEqual(movie_copy.movie.title, 'Sphere')
+        self.assertEqual(movie_copy.platform, 'Amazon Prime Video')
+        self.assertEqual(movie_copy.form, 'VOD')
+        self.assertEqual(movie_copy.vod_link, 'amazon.com')
 
     def test_moviecopy_list_view(self):
         response = self.client.get(reverse('movie_copy_list'))
@@ -131,7 +128,8 @@ class MovieCopyModelTests(TestCase):
     #     self.assertEqual(response.status_code, 200)
     
     def test_moviecopy_str(self):
+        movie_copy = self.create_movie_copy()
         expected = 'justatest\'s VOD of Sphere on Amazon Prime Video'
-        actual = str(self.movie_copy)
+        actual = str(movie_copy)
         self.assertEqual(actual, expected)
     
