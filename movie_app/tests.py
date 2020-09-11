@@ -6,6 +6,12 @@ from .models import (
     Movie,
     MovieCopy,
 )
+from .views import (
+    MovieDetailView,
+    MovieListView,
+    MovieCopyDetailView,
+    MovieCopyListView,
+)
 
 import json
 
@@ -54,21 +60,22 @@ class MovieModelTests(TestCase):
         self.assertEqual(actual, expected)
 
     def test_movie_absolute_url(self):
-        self.assertEqual(self.movie._absolute_url, '/api/v1/movies/1')
+        self.assertURLEqual(self.movie._absolute_url, '/api/v1/movies/5')
 
     def test_movie_list_view(self):
         response = self.client.get(reverse('movie_list'))
+        # https://docs.djangoproject.com/en/3.1/topics/testing/tools/#django.test.Response.resolver_match
+        self.assertEqual(response.resolver_match.func.__name__, MovieListView.as_view().__name__)
         self.assertEqual(response.status_code, 200)
         # Need to dig deeper into 'response' to find JSON content
 
     # def test_movie_detail_view(self):
-    #     url = reverse('movie_detail', args=['1'])
+    #     movie = Movie.objects.all()[0]
+    #     url = reverse('movie_detail', args=[str(movie.id)])
     #     print(url)
     #     response = self.client.get(url)
     #     # Receiving a 404 back for some reason
     #     self.assertEqual(response.status_code, 200)
-
-    # MovieCopy Model Tests
 
 
 class MovieCopyModelTests(TestCase):
@@ -102,8 +109,8 @@ class MovieCopyModelTests(TestCase):
     def test_moviecopy_absolute_url(self):
         # ID is 5 because this is the 6th test function that has run setUp()
         # Tests seems to be run in alphabetical order by method name
-        self.assertEqual(self.movie_copy._absolute_url, '/api/v1/movies/copies/6')
-    
+        self.assertURLEqual(self.movie_copy._absolute_url, '/api/v1/movies/copies/1')
+
     def test_moviecopy_content(self):
         self.assertEqual(self.movie_copy.owner.username, 'justatest')
         self.assertEqual(self.movie_copy.movie.title, 'Sphere')
@@ -113,7 +120,15 @@ class MovieCopyModelTests(TestCase):
 
     def test_moviecopy_list_view(self):
         response = self.client.get(reverse('movie_copy_list'))
+        self.assertEqual(response.resolver_match.func.__name__, MovieCopyListView.as_view().__name__)
         self.assertEqual(response.status_code, 200)
+
+    # def test_moviecopy_detail_view(self):
+    #     copy = MovieCopy.objects.all()[0]
+    #     url = reverse('movie_copy_detail', args=[str(copy.id)])
+    #     print(url)
+    #     response = self.client.get(url)
+    #     self.assertEqual(response.status_code, 200)
     
     def test_moviecopy_str(self):
         expected = 'justatest\'s VOD of Sphere on Amazon Prime Video'
