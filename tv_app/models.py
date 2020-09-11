@@ -1,4 +1,6 @@
 from django.db import models
+from django.urls import reverse
+
 
 class Show(models.Model):
     owner = models.ForeignKey('auth.user', related_name='shows', on_delete=models.CASCADE)
@@ -10,6 +12,10 @@ class Show(models.Model):
 
     def __str__(self):
         return f'{self.title} ({self.year_first_aired})'
+
+    @property
+    def _absolute_url(self):
+        return reverse('show_detail', args=[str(self.id)])
 
 
 class Season(models.Model):
@@ -26,6 +32,9 @@ class Season(models.Model):
     def __str__(self):
         return f'{self.show.title} - Season {self.season_number}'
 
+    @property
+    def _absolute_url(self):
+        return reverse('season_detail', args=[str(self.id)])
 
 class SeasonCopy(models.Model):
     owner = models.ForeignKey('auth.user', related_name='all_season_copies', on_delete=models.CASCADE)
@@ -37,3 +46,7 @@ class SeasonCopy(models.Model):
     def __str__(self):
         return f'{self.season.owner.username}\'s {self.form} of \
             {self.season.show.title} season {self.season.season_number} on {self.platform}'
+
+    @property
+    def _absolute_url(self):
+        return reverse('season_copy_detail', args=[str(self.id)])
