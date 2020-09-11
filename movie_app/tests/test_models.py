@@ -2,18 +2,11 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import (
+from movie_app.models import (
     Movie,
     MovieCopy,
 )
-from .views import (
-    MovieDetailView,
-    MovieListView,
-    MovieCopyDetailView,
-    MovieCopyListView,
-)
 
-import json
 
 class MovieModelTests(TestCase):
     def create_movie(self):
@@ -58,21 +51,6 @@ class MovieModelTests(TestCase):
         actual = movie._absolute_url
         self.assertURLEqual(actual, expected)
 
-    def test_movie_list_view(self):
-        response = self.client.get(reverse('movie_list'))
-        # https://docs.djangoproject.com/en/3.1/topics/testing/tools/#django.test.Response.resolver_match
-        self.assertEqual(response.resolver_match.func.__name__, MovieListView.as_view().__name__)
-        self.assertEqual(response.status_code, 200)
-        # Need to dig deeper into 'response' to find JSON content
-
-    # def test_movie_detail_view(self):
-    #     movie = Movie.objects.all()[0]
-    #     url = reverse('movie_detail', args=[str(movie.id)])
-    #     print(url)
-    #     response = self.client.get(url)
-    #     # Receiving a 404 back for some reason
-    #     self.assertEqual(response.status_code, 200)
-
 
 class MovieCopyModelTests(TestCase):
     def create_movie_copy(self):
@@ -114,18 +92,6 @@ class MovieCopyModelTests(TestCase):
         self.assertEqual(movie_copy.platform, 'Amazon Prime Video')
         self.assertEqual(movie_copy.form, 'VOD')
         self.assertEqual(movie_copy.vod_link, 'amazon.com')
-
-    def test_moviecopy_list_view(self):
-        response = self.client.get(reverse('movie_copy_list'))
-        self.assertEqual(response.resolver_match.func.__name__, MovieCopyListView.as_view().__name__)
-        self.assertEqual(response.status_code, 200)
-
-    # def test_moviecopy_detail_view(self):
-    #     copy = MovieCopy.objects.all()[0]
-    #     url = reverse('movie_copy_detail', args=[str(copy.id)])
-    #     print(url)
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, 200)
     
     def test_moviecopy_str(self):
         movie_copy = self.create_movie_copy()

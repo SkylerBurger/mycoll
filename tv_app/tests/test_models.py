@@ -2,18 +2,10 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import (
+from tv_app.models import (
     Show,
     Season,
     SeasonCopy,
-)
-from .views import (
-    ShowDetailView,
-    ShowListView,
-    SeasonDetailView,
-    SeasonListView,
-    SeasonCopyDetailView,
-    SeasonCopyListView,
 )
 
 
@@ -41,11 +33,6 @@ class ShowModelTests(TestCase):
         actual = show._absolute_url
         self.assertEqual(expected, actual)
 
-    def test_show_list_view(self):
-        response = self.client.get(reverse('show_list'))
-        self.assertEqual(response.resolver_match.func.__name__, ShowListView.as_view().__name__)
-        self.assertEqual(response.status_code, 200)
-
     def test_show_content(self):
         show = self.create_show()
         self.assertEqual(show.owner.username, 'justatest')
@@ -60,6 +47,7 @@ class ShowModelTests(TestCase):
         expected = 'Sabrina the Teenage Witch (1996)'
         actual = str(show)
         self.assertEqual(actual, expected)
+
 
 class SeasonModelTests(TestCase):
     def create_season(self):
@@ -95,11 +83,6 @@ class SeasonModelTests(TestCase):
         expected = f'/api/v1/tv/season/{season.id}'
         actual = season._absolute_url
         self.assertEqual(actual, expected)
-
-    def test_season_list_view(self):
-        response = self.client.get(reverse('season_list'))
-        self.assertEqual(response.resolver_match.func.__name__, SeasonListView.as_view().__name__)
-        self.assertEqual(response.status_code, 200)
 
     def test_season_content(self):
         season = self.create_season()
@@ -169,11 +152,6 @@ class SeasonCopyModelTests(TestCase):
         self.assertEqual(season_copy.platform, 'Amazon Prime Video')
         self.assertEqual(season_copy.form, 'VOD')
         self.assertEqual(season_copy.vod_link, 'www.amazon.com')
-
-    def test_season_copy_list_view(self):
-        response = self.client.get(reverse('season_copy_list'))
-        self.assertEqual(response.resolver_match.func.__name__, SeasonCopyListView.as_view().__name__)
-        self.assertEqual(response.status_code, 200)
 
     def test_season_copy_str(self):
         season = self.create_season_copy()
